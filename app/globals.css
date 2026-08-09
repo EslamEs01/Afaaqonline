@@ -30,7 +30,7 @@ body {
   margin: 0;
   background: var(--white);
   color: var(--ink);
-  font-family: "Alexandria Variable", "Tahoma", sans-serif;
+  font-family: "Cairo Variable", "Tahoma", sans-serif;
   font-size: 16px;
   line-height: 1.8;
   text-rendering: optimizeLegibility;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@fontsource-variable/alexandria";
+import "@fontsource-variable/cairo";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";

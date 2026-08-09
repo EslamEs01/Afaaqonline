@@ -6,7 +6,7 @@
 
 - Vinext / React 19 / TypeScript
 - Tailwind CSS 4 مع نظام تصميم مخصص
-- Alexandria Variable محليًا؛ لا يعتمد الخط على CDN
+- Cairo Variable محليًا؛ لا يعتمد الخط على CDN
 - RTL عربي كامل ومتجاوب مع الهاتف والتابلت والكمبيوتر
 - صور WebP محلية محسّنة، دون hotlinks خارجية
 - Django 5.2 + Django REST Framework
