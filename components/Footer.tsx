@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useSiteSettings } from "@/lib/site-settings-context";
+import { localPhoneDisplay, whatsappUrl } from "@/lib/site-settings";
 import { Icon } from "./Icon";
 
 const courseLinks = [
@@ -9,6 +13,7 @@ const courseLinks = [
 ];
 
 export function Footer() {
+  const siteSettings = useSiteSettings();
   return (
     <footer className="site-footer">
       <div className="footer-pattern" aria-hidden="true" />
@@ -19,7 +24,7 @@ export function Footer() {
             تعليم فردي مباشر للغة العربية والقرآن الكريم والتربية الإسلامية، يساعد أبناءنا على فهم
             لغتهم والاعتزاز بهويتهم.
           </p>
-          <strong>نرسّخ الهوية ونبني المستقبل</strong>
+          <strong>{siteSettings.slogan}</strong>
         </div>
 
         <div>
@@ -45,13 +50,13 @@ export function Footer() {
         <div className="footer-contact">
           <h2>نحن بالقرب منك</h2>
           <p>فريق آفاق جاهز للإجابة عن أسئلتك ومساعدتك في اختيار البداية المناسبة.</p>
-          <a href="https://wa.me/201041391631" target="_blank" rel="noreferrer">
+          <a href={whatsappUrl(siteSettings.whatsapp)} target="_blank" rel="noreferrer">
             <Icon name="whatsapp" />
-            واتساب: 01041391631
+            واتساب: {localPhoneDisplay(siteSettings.whatsapp)}
           </a>
-          <a href="mailto:afaaqinstitute@gmail.com">
+          <a href={`mailto:${siteSettings.email}`}>
             <Icon name="email" />
-            afaaqinstitute@gmail.com
+            {siteSettings.email}
           </a>
         </div>
       </div>
@@ -65,4 +70,3 @@ export function Footer() {
     </footer>
   );
 }
-

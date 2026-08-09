@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { CourseExplorer } from "@/components/CourseExplorer";
 import { FinalCta } from "@/components/FinalCta";
 import { PageHero } from "@/components/PageHero";
+import { getCourses } from "@/lib/content-api";
 
 export const metadata: Metadata = {
   title: "البرامج والكورسات",
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/courses" },
 };
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const courses = await getCourses();
   return (
     <>
       <PageHero
@@ -22,7 +24,7 @@ export default function CoursesPage() {
       <section className="course-explorer section-pad">
         <div className="container">
           <Suspense fallback={<div className="courses-loading">جاري تجهيز الكورسات…</div>}>
-            <CourseExplorer />
+            <CourseExplorer courses={courses} />
           </Suspense>
         </div>
       </section>
@@ -30,4 +32,3 @@ export default function CoursesPage() {
     </>
   );
 }
-

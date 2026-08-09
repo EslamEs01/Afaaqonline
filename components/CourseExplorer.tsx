@@ -2,8 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import type { CourseCategory } from "@/data/courses";
-import { courses } from "@/data/courses";
+import type { Course, CourseCategory } from "@/data/courses";
 import { CourseCard } from "./CourseCard";
 
 const filters: { value: "all" | CourseCategory; label: string }[] = [
@@ -13,7 +12,7 @@ const filters: { value: "all" | CourseCategory; label: string }[] = [
   { value: "islamic", label: "التربية الإسلامية" },
 ];
 
-export function CourseExplorer() {
+export function CourseExplorer({ courses }: { courses: Course[] }) {
   const searchParams = useSearchParams();
   const initial = searchParams.get("category");
   const [active, setActive] = useState<"all" | CourseCategory>(
@@ -21,7 +20,7 @@ export function CourseExplorer() {
   );
   const visible = useMemo(
     () => (active === "all" ? courses : courses.filter((course) => course.category === active)),
-    [active],
+    [active, courses],
   );
 
   return (
@@ -46,4 +45,3 @@ export function CourseExplorer() {
     </div>
   );
 }
-

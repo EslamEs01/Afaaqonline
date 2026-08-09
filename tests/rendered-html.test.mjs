@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -23,6 +24,8 @@ test("renders the Arabic RTL branded homepage", async () => {
   assert.match(html, /نرسّخ[^<]*الهوية/);
   assert.match(html, /احجز حصتك التجريبية/);
   assert.match(html, /afaaqinstitute@gmail\.com/);
+  assert.match(html, /https:\/\/afaaqinstitute\.com/);
+  assert.doesNotMatch(html, /afaaqonline\.com/i);
   assert.doesNotMatch(html, /Starter Project|Ship something real/);
 });
 
@@ -50,3 +53,14 @@ test("renders a complete course detail page", async () => {
   assert.match(html, /احجز حصة تجريبية/);
 });
 
+test("renders all 13 canonical course pages", async () => {
+  const canonicalCourses = JSON.parse(
+    await readFile(new URL("../backend/academy/seed/courses.json", import.meta.url), "utf8"),
+  );
+  const slugs = canonicalCourses.map((course) => course.slug);
+  assert.equal(slugs.length, 13);
+  for (const slug of slugs) {
+    const { response } = await render(`/courses/${slug}`);
+    assert.equal(response.status, 200, `${slug} should render`);
+  }
+});

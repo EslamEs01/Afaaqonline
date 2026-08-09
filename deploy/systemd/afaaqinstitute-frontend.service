@@ -1,0 +1,23 @@
+[Unit]
+Description=Afaaq Institute Vinext frontend
+After=network.target afaaqinstitute-backend.service
+Wants=afaaqinstitute-backend.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/afaaqinstitute
+EnvironmentFile=/var/www/afaaqinstitute/.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=4
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

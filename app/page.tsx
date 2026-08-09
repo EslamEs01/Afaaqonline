@@ -3,7 +3,8 @@ import { CourseCard } from "@/components/CourseCard";
 import { FinalCta } from "@/components/FinalCta";
 import { Icon } from "@/components/Icon";
 import { SectionHeading } from "@/components/SectionHeading";
-import { categoryMeta, courses } from "@/data/courses";
+import { categoryMeta } from "@/data/courses";
+import { getCourses, getTestimonials } from "@/lib/content-api";
 
 const strengths = [
   { icon: "teacher" as const, title: "تعليم فردي مباشر", text: "معلم واحد وطالب واحد لاهتمام كامل ووقت تعلّم فعّال." },
@@ -21,28 +22,12 @@ const journey = [
   { number: "04", title: "تبدأ رحلة آفاق", text: "دروس تفاعلية ومتابعة تساعده على التقدم بثقة." },
 ];
 
-const testimonials = [
-  {
-    quote: "لاحظنا فرقًا حقيقيًا في حب ابنتنا للعربية. أصبحت تحكي لنا عن الدرس وتنتظر موعد المعلمة كل أسبوع.",
-    name: "والدة مريم",
-    meta: "المملكة المتحدة",
-    initials: "م",
-  },
-  {
-    quote: "الجميل أن الخطة ليست واحدة للجميع. المعلم فهم نقاط ضعف ابني وبدأ معه بهدوء، وتحسنت قراءته كثيرًا.",
-    name: "والد يوسف",
-    meta: "كندا",
-    initials: "ي",
-  },
-  {
-    quote: "المتابعة بعد الدرس تطمئنني جدًا. أعرف ماذا تعلّم ابني وما الذي يحتاج إلى مراجعة بسيطة في البيت.",
-    name: "والدة آدم",
-    meta: "فرنسا",
-    initials: "أ",
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const [courses, testimonials] = await Promise.all([getCourses(), getTestimonials()]);
+  const featuredCourses = courses.filter((course) => course.isFeatured);
+  const homeCourses = featuredCourses.length >= 3
+    ? featuredCourses.slice(0, 3)
+    : [courses.find((course) => course.category === "arabic"), courses.find((course) => course.category === "quran"), courses.find((course) => course.category === "islamic")].filter((course) => course !== undefined);
   return (
     <>
       <section className="home-hero">
@@ -167,7 +152,7 @@ export default function Home() {
             <Link className="text-link text-link-large" href="/courses">عرض جميع الكورسات <Icon name="arrow" /></Link>
           </div>
           <div className="courses-grid home-courses">
-            {[courses[0], courses[4], courses[9]].map((course) => <CourseCard course={course} key={course.slug} />)}
+            {homeCourses.map((course) => <CourseCard course={course} key={course.slug} />)}
           </div>
         </div>
       </section>
@@ -192,27 +177,28 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="testimonials-section section-pad">
-        <div className="container">
-          <SectionHeading eyebrow="قالوا عن آفاق" title="تجارب تبدأ بالطمأنينة وتنمو بالنتائج" />
-          <div className="testimonials-grid">
-            {testimonials.map((testimonial) => (
-              <article className="testimonial-card" key={testimonial.name}>
-                <div className="quote-mark" aria-hidden="true">“</div>
-                <div className="stars" aria-label="تقييم 5 من 5">★★★★★</div>
-                <blockquote>{testimonial.quote}</blockquote>
-                <div className="testimonial-author">
-                  <span>{testimonial.initials}</span>
-                  <p><strong>{testimonial.name}</strong><small>{testimonial.meta}</small></p>
-                </div>
-              </article>
-            ))}
+      {testimonials.length ? (
+        <section className="testimonials-section section-pad">
+          <div className="container">
+            <SectionHeading eyebrow="قالوا عن آفاق" title="تجارب تبدأ بالطمأنينة وتنمو بالنتائج" />
+            <div className="testimonials-grid">
+              {testimonials.map((testimonial) => (
+                <article className="testimonial-card" key={`${testimonial.name}-${testimonial.quote}`}>
+                  <div className="quote-mark" aria-hidden="true">“</div>
+                  <div className="stars" aria-label={`تقييم ${testimonial.rating} من 5`}>{"★".repeat(testimonial.rating)}</div>
+                  <blockquote>{testimonial.quote}</blockquote>
+                  <div className="testimonial-author">
+                    <span>{testimonial.initials || testimonial.name.slice(0, 1)}</span>
+                    <p><strong>{testimonial.name}</strong><small>{testimonial.meta}</small></p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <FinalCta />
     </>
   );
 }
-

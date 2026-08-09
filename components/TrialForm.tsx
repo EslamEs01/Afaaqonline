@@ -1,11 +1,14 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
-import { courses } from "@/data/courses";
+import { FormEvent, useMemo, useRef, useState } from "react";
+import type { Course } from "@/data/courses";
+import { postToApi } from "@/lib/client-api";
+import { useSiteSettings } from "@/lib/site-settings-context";
+import { whatsappUrl } from "@/lib/site-settings";
 import { Icon } from "./Icon";
 
-type FormData = {
+type TrialFormValues = {
   subject: string;
   course: string;
   studentName: string;
@@ -21,7 +24,7 @@ type FormData = {
   notes: string;
 };
 
-const initialData: FormData = {
+const initialData: TrialFormValues = {
   subject: "",
   course: "",
   studentName: "",
@@ -39,23 +42,27 @@ const initialData: FormData = {
 
 const steps = ["المادة", "الطالب", "الموعد", "ولي الأمر", "تأكيد الطلب"];
 
-export function TrialForm() {
+export function TrialForm({ courses }: { courses: Course[] }) {
+  const siteSettings = useSiteSettings();
   const searchParams = useSearchParams();
   const selectedCourse = courses.find((course) => course.slug === searchParams.get("course"));
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [data, setData] = useState<FormData>(() => ({
+  const idempotencyKey = useRef("");
+  const submissionInFlight = useRef(false);
+  const [data, setData] = useState<TrialFormValues>(() => ({
     ...initialData,
     course: selectedCourse?.title ?? "",
     subject: selectedCourse?.categoryLabel ?? "",
   }));
 
   const progress = ((step + 1) / steps.length) * 100;
-  const update = (field: keyof FormData, value: string) => setData((current) => ({ ...current, [field]: value }));
+  const update = (field: keyof TrialFormValues, value: string) => setData((current) => ({ ...current, [field]: value }));
   const availableCourses = useMemo(
     () => courses.filter((course) => !data.subject || course.categoryLabel === data.subject),
-    [data.subject],
+    [courses, data.subject],
   );
 
   const validate = () => {
@@ -74,10 +81,29 @@ export function TrialForm() {
     document.getElementById("trial-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
-    document.getElementById("trial-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (submissionInFlight.current) return;
+    submissionInFlight.current = true;
+    const values = new window.FormData(event.currentTarget);
+    idempotencyKey.current ||= crypto.randomUUID();
+    setError("");
+    setSubmitting(true);
+    try {
+      await postToApi<{ message: string; reference: number }>("trial-requests/", {
+        ...data,
+        website: values.get("website"),
+        idempotencyKey: idempotencyKey.current,
+      });
+      setSubmitted(true);
+      idempotencyKey.current = "";
+      document.getElementById("trial-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "تعذر إرسال الطلب الآن. حاول مرة أخرى.");
+    } finally {
+      submissionInFlight.current = false;
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -92,13 +118,14 @@ export function TrialForm() {
           <span><small>المادة</small><strong>{data.course || data.subject}</strong></span>
           <span><small>الوقت المفضل</small><strong>{data.day} — {data.period}</strong></span>
         </div>
-        <a className="button button-primary" href="https://wa.me/201041391631" target="_blank" rel="noreferrer">تواصل معنا عبر واتساب <Icon name="whatsapp" /></a>
+        <a className="button button-primary" href={whatsappUrl(siteSettings.whatsapp)} target="_blank" rel="noreferrer">تواصل معنا عبر واتساب <Icon name="whatsapp" /></a>
       </div>
     );
   }
 
   return (
     <form className="trial-form" id="trial-form" onSubmit={submit} noValidate>
+      <input aria-hidden="true" autoComplete="off" className="form-honeypot" name="website" tabIndex={-1} type="text" />
       <div className="form-progress-mobile"><span>الخطوة {step + 1} من {steps.length}</span><strong>{steps[step]}</strong><i><b style={{ width: `${progress}%` }} /></i></div>
       <div className="trial-steps" aria-label="خطوات الحجز">
         {steps.map((label, index) => (
@@ -182,10 +209,9 @@ export function TrialForm() {
         {error ? <p className="form-error" role="alert">{error}</p> : null}
         <div className="form-actions">
           {step > 0 ? <button className="button button-outline" onClick={() => { setError(""); setStep((current) => current - 1); }} type="button">السابق</button> : <span />}
-          {step < steps.length - 1 ? <button className="button button-primary" onClick={next} type="button">التالي <Icon name="arrow" /></button> : <button className="button button-primary" type="submit">تأكيد طلب الحصة <Icon name="check" /></button>}
+          {step < steps.length - 1 ? <button className="button button-primary" onClick={next} type="button">التالي <Icon name="arrow" /></button> : <button className="button button-primary" disabled={submitting} type="submit">{submitting ? "جاري الإرسال…" : "تأكيد طلب الحصة"} <Icon name="check" /></button>}
         </div>
       </div>
     </form>
   );
 }
-

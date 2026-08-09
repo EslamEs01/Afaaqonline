@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  return { rules: { userAgent: "*", allow: "/" }, sitemap: "https://afaaqonline.com/sitemap.xml", host: "https://afaaqonline.com" };
+  return { rules: { userAgent: "*", allow: "/" }, sitemap: "https://afaaqinstitute.com/sitemap.xml", host: "https://afaaqinstitute.com" };
 }
-

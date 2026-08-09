@@ -1,0 +1,29 @@
+[Unit]
+Description=Afaaq Institute Django API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/afaaqinstitute/backend
+EnvironmentFile=/var/www/afaaqinstitute/backend/.env
+ExecStart=/var/www/afaaqinstitute/backend/.venv/bin/gunicorn \
+  --workers 3 \
+  --bind 127.0.0.1:8001 \
+  --timeout 60 \
+  --access-logfile - \
+  --error-logfile - \
+  afaaq_backend.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+RestartSec=4
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

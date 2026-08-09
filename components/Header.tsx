@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSiteSettings } from "@/lib/site-settings-context";
+import { telephoneUrl } from "@/lib/site-settings";
 import { Icon } from "./Icon";
 
 const navItems = [
@@ -15,6 +17,7 @@ const navItems = [
 ];
 
 export function Header() {
+  const siteSettings = useSiteSettings();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -27,13 +30,13 @@ export function Header() {
         <div className="container topbar-inner">
           <p>حصتك التجريبية الأولى مجانًا — ابدأ بخطوة مطمئنة</p>
           <div className="topbar-links">
-            <a href="mailto:afaaqinstitute@gmail.com">
+            <a href={`mailto:${siteSettings.email}`}>
               <Icon name="email" size={16} />
-              afaaqinstitute@gmail.com
+              {siteSettings.email}
             </a>
-            <a dir="ltr" href="tel:+201041391631">
+            <a dir="ltr" href={telephoneUrl(siteSettings.phone)}>
               <Icon name="phone" size={16} />
-              +20 104 139 1631
+              {siteSettings.phone}
             </a>
           </div>
         </div>

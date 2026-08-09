@@ -1,0 +1,79 @@
+:root {
+  --afaaq-dark-green: #073719;
+  --afaaq-green: #114f28;
+  --afaaq-gold: #c69430;
+}
+
+html[lang="ar"] body,
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+  font-family: Arial, Tahoma, sans-serif;
+}
+
+.main-sidebar,
+.main-sidebar::before,
+.brand-link {
+  background-color: var(--afaaq-dark-green) !important;
+}
+
+.navbar-success,
+.bg-success,
+.btn-success {
+  background-color: var(--afaaq-green) !important;
+  border-color: var(--afaaq-green) !important;
+}
+
+.sidebar-dark-success .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-dark-success .nav-treeview > .nav-item > .nav-link.active {
+  background-color: var(--afaaq-gold) !important;
+  color: #1c2d22 !important;
+}
+
+.afaaq-admin-logo,
+.login-logo img {
+  max-height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-link .brand-image {
+  max-height: 42px;
+  width: auto;
+}
+
+.content-wrapper a:not(.btn),
+.card-title {
+  color: var(--afaaq-green);
+}
+
+.content-wrapper .btn-warning,
+.accent-warning .btn-link,
+.accent-warning a {
+  color: #6b4910;
+}
+
+html[dir="rtl"] .main-sidebar {
+  right: 0;
+  left: auto;
+}
+
+html[dir="rtl"] body:not(.sidebar-collapse) .content-wrapper,
+html[dir="rtl"] body:not(.sidebar-collapse) .main-header,
+html[dir="rtl"] body:not(.sidebar-collapse) .main-footer {
+  margin-right: 250px;
+  margin-left: 0;
+}
+
+html[dir="rtl"] .nav-sidebar .nav-link > p > .right {
+  left: 1rem;
+  right: auto;
+}
+
+@media (max-width: 991.98px) {
+  html[dir="rtl"] body:not(.sidebar-collapse) .content-wrapper,
+  html[dir="rtl"] body:not(.sidebar-collapse) .main-header,
+  html[dir="rtl"] body:not(.sidebar-collapse) .main-footer {
+    margin-right: 0;
+  }
+}

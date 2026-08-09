@@ -14,6 +14,7 @@ export type Course = {
   goals: string[];
   outcomes: string[];
   accent: string;
+  isFeatured?: boolean;
 };
 
 export const categoryMeta: Record<
@@ -374,4 +375,3 @@ export const courses: Course[] = [
 export function getCourse(slug: string) {
   return courses.find((course) => course.slug === slug);
 }
-

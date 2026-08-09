@@ -4,9 +4,11 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { getSiteSettings } from "@/lib/content-api";
+import { SiteSettingsProvider } from "@/lib/site-settings-context";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://afaaqonline.com"),
+  metadataBase: new URL("https://afaaqinstitute.com"),
   title: {
     default: "أكاديمية آفاق | نرسّخ الهوية ونبني المستقبل",
     template: "%s | أكاديمية آفاق",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ar_AR",
-    url: "https://afaaqonline.com",
+    url: "https://afaaqinstitute.com",
     siteName: "أكاديمية آفاق",
     title: "أكاديمية آفاق | نرسّخ الهوية ونبني المستقبل",
     description: "تعليم العربية والقرآن والتربية الإسلامية بطريقة تناسب أبناءنا في كل مكان.",
@@ -43,33 +45,34 @@ export const metadata: Metadata = {
   },
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  name: "أكاديمية آفاق",
-  alternateName: "Afaaq Academy",
-  url: "https://afaaqonline.com",
-  logo: "https://afaaqonline.com/images/afaaq-logo.png",
-  slogan: "نرسّخ الهوية ونبني المستقبل",
-  email: "afaaqinstitute@gmail.com",
-  telephone: "+201041391631",
-  areaServed: "Worldwide",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const siteSettings = await getSiteSettings();
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: siteSettings.academyName,
+    alternateName: "Afaaq Academy",
+    url: "https://afaaqinstitute.com",
+    logo: "https://afaaqinstitute.com/images/afaaq-logo.png",
+    slogan: siteSettings.slogan,
+    email: siteSettings.email,
+    telephone: `+${siteSettings.whatsapp.replace(/\D/g, "")}`,
+    areaServed: "Worldwide",
+  };
   return (
     <html dir="rtl" lang="ar">
       <body>
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
-        <FloatingWhatsApp />
-        <script
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-          type="application/ld+json"
-        />
+        <SiteSettingsProvider settings={siteSettings}>
+          <Header />
+          <main id="main-content">{children}</main>
+          <Footer />
+          <FloatingWhatsApp />
+          <script
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+            type="application/ld+json"
+          />
+        </SiteSettingsProvider>
       </body>
     </html>
   );
 }
-

@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useSiteSettings } from "@/lib/site-settings-context";
+import { whatsappUrl } from "@/lib/site-settings";
 import { Icon } from "./Icon";
 
 export function FinalCta({
@@ -8,6 +12,7 @@ export function FinalCta({
   title?: string;
   text?: string;
 }) {
+  const siteSettings = useSiteSettings();
   return (
     <section className="final-cta section-pad">
       <div className="container">
@@ -24,7 +29,7 @@ export function FinalCta({
             <Link className="button button-gold" href="/free-trial">
               احجز الحصة المجانية <Icon name="arrow" />
             </Link>
-            <a className="button button-ghost-light" href="https://wa.me/201041391631" target="_blank" rel="noreferrer">
+            <a className="button button-ghost-light" href={whatsappUrl(siteSettings.whatsapp)} target="_blank" rel="noreferrer">
               اسألنا عبر واتساب
             </a>
           </div>
@@ -33,4 +38,3 @@ export function FinalCta({
     </section>
   );
 }
-

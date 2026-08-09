@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { CourseCard } from "@/components/CourseCard";
 import { FinalCta } from "@/components/FinalCta";
 import { Icon } from "@/components/Icon";
-import { courses, getCourse } from "@/data/courses";
+import { courses } from "@/data/courses";
+import { getCourseBySlug, getCourses, getSiteSettings } from "@/lib/content-api";
+import { whatsappUrl } from "@/lib/site-settings";
 
 export function generateStaticParams() {
   return courses.map((course) => ({ slug: course.slug }));
@@ -12,7 +14,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const course = getCourse(slug);
+  const course = await getCourseBySlug(slug);
   if (!course) return {};
   return {
     title: course.title,
@@ -23,9 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const course = getCourse(slug);
+  const course = await getCourseBySlug(slug);
   if (!course) notFound();
-  const related = courses.filter((item) => item.category === course.category && item.slug !== course.slug).slice(0, 3);
+  const [allCourses, siteSettings] = await Promise.all([getCourses(), getSiteSettings()]);
+  const related = allCourses.filter((item) => item.category === course.category && item.slug !== course.slug).slice(0, 3);
 
   return (
     <>
@@ -40,7 +43,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             <p>{course.description}</p>
             <div className="course-hero-actions">
               <Link className="button button-gold" href={`/free-trial?course=${course.slug}`}>احجز حصة تجريبية <Icon name="arrow" /></Link>
-              <a className="button button-ghost-light" href="https://wa.me/201041391631" target="_blank" rel="noreferrer">اسأل عن الكورس</a>
+              <a className="button button-ghost-light" href={whatsappUrl(siteSettings.whatsapp)} target="_blank" rel="noreferrer">اسأل عن الكورس</a>
             </div>
           </div>
           <div className="course-facts-card">
@@ -98,4 +101,3 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
     </>
   );
 }
-
