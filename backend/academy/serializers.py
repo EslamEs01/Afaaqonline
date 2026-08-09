@@ -62,6 +62,26 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
     facebookUrl = serializers.URLField(source="facebook_url", read_only=True)
     instagramUrl = serializers.URLField(source="instagram_url", read_only=True)
     youtubeUrl = serializers.URLField(source="youtube_url", read_only=True)
+    homeHeroEyebrow = serializers.CharField(source="home_hero_eyebrow", read_only=True)
+    homeHeroTitlePrefix = serializers.CharField(source="home_hero_title_prefix", read_only=True)
+    homeHeroTitleHighlight = serializers.CharField(source="home_hero_title_highlight", read_only=True)
+    homeHeroTitleSuffix = serializers.CharField(source="home_hero_title_suffix", read_only=True)
+    homeHeroDescription = serializers.CharField(source="home_hero_description", read_only=True)
+    aboutHeroDescription = serializers.CharField(source="about_hero_description", read_only=True)
+    aboutHeadingPrefix = serializers.CharField(source="about_heading_prefix", read_only=True)
+    aboutHeadingHighlight = serializers.CharField(source="about_heading_highlight", read_only=True)
+    aboutBodyPrimary = serializers.CharField(source="about_body_primary", read_only=True)
+    aboutBodySecondary = serializers.CharField(source="about_body_secondary", read_only=True)
+    visionTitle = serializers.CharField(source="vision_title", read_only=True)
+    visionDescription = serializers.CharField(source="vision_description", read_only=True)
+    missionTitle = serializers.CharField(source="mission_title", read_only=True)
+    missionDescription = serializers.CharField(source="mission_description", read_only=True)
+    goalTitle = serializers.CharField(source="goal_title", read_only=True)
+    goalDescription = serializers.CharField(source="goal_description", read_only=True)
+    footerDescription = serializers.CharField(source="footer_description", read_only=True)
+    ctaEyebrow = serializers.CharField(source="cta_eyebrow", read_only=True)
+    ctaTitle = serializers.CharField(source="cta_title", read_only=True)
+    ctaDescription = serializers.CharField(source="cta_description", read_only=True)
 
     class Meta:
         model = SiteSettings
@@ -76,6 +96,26 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
             "facebookUrl",
             "instagramUrl",
             "youtubeUrl",
+            "homeHeroEyebrow",
+            "homeHeroTitlePrefix",
+            "homeHeroTitleHighlight",
+            "homeHeroTitleSuffix",
+            "homeHeroDescription",
+            "aboutHeroDescription",
+            "aboutHeadingPrefix",
+            "aboutHeadingHighlight",
+            "aboutBodyPrimary",
+            "aboutBodySecondary",
+            "visionTitle",
+            "visionDescription",
+            "missionTitle",
+            "missionDescription",
+            "goalTitle",
+            "goalDescription",
+            "footerDescription",
+            "ctaEyebrow",
+            "ctaTitle",
+            "ctaDescription",
         )
 
 

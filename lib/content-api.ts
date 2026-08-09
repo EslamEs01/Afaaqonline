@@ -19,7 +19,7 @@ async function fetchContent<T>(path: string): Promise<T | null> {
   try {
     const response = await fetch(`${INTERNAL_API_BASE}/${path.replace(/^\//, "")}`, {
       headers: { Accept: "application/json", "X-Forwarded-Proto": "https" },
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
     if (!response.ok) return null;
     return (await response.json()) as T;

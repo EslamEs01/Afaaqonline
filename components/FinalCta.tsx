@@ -6,8 +6,8 @@ import { whatsappUrl } from "@/lib/site-settings";
 import { Icon } from "./Icon";
 
 export function FinalCta({
-  title = "ابدأ رحلة ابنك مع آفاق اليوم",
-  text = "دعنا نتعرف إلى احتياجاته ونرشح له نقطة البداية الأنسب في حصة تجريبية مجانية.",
+  title,
+  text,
 }: {
   title?: string;
   text?: string;
@@ -21,9 +21,9 @@ export function FinalCta({
             <img src="/images/afaaq-mark.webp" alt="" />
           </div>
           <div>
-            <span className="eyebrow eyebrow-light"><i aria-hidden="true" />خطوة صغيرة، أثر كبير</span>
-            <h2>{title}</h2>
-            <p>{text}</p>
+            <span className="eyebrow eyebrow-light"><i aria-hidden="true" />{siteSettings.ctaEyebrow}</span>
+            <h2>{title ?? siteSettings.ctaTitle}</h2>
+            <p>{text ?? siteSettings.ctaDescription}</p>
           </div>
           <div className="cta-actions">
             <Link className="button button-gold" href="/free-trial">

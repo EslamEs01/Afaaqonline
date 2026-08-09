@@ -20,9 +20,6 @@ if [[ "${AFQ_SKIP_PULL:-false}" != "true" ]]; then
   git pull --ff-only origin main
 fi
 
-npm ci
-npm run build
-
 python3 -m venv "$BACKEND_ROOT/.venv"
 "$BACKEND_ROOT/.venv/bin/pip" install --disable-pip-version-check -r "$BACKEND_ROOT/requirements.lock.txt"
 
@@ -37,7 +34,14 @@ set +a
 "$BACKEND_ROOT/.venv/bin/python" "$BACKEND_ROOT/manage.py" collectstatic --noinput
 
 if [[ "${AFQ_SKIP_RESTART:-false}" != "true" ]]; then
-  systemctl restart afaaqinstitute-backend.service afaaqinstitute-frontend.service
+  systemctl restart afaaqinstitute-backend.service
+fi
+
+npm ci
+npm run build
+
+if [[ "${AFQ_SKIP_RESTART:-false}" != "true" ]]; then
+  systemctl restart afaaqinstitute-frontend.service
   systemctl --no-pager --full status afaaqinstitute-backend.service afaaqinstitute-frontend.service
 fi
 

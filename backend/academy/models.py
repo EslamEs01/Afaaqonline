@@ -99,6 +99,66 @@ class SiteSettings(TimestampedModel):
     facebook_url = models.URLField("فيسبوك", blank=True)
     instagram_url = models.URLField("إنستجرام", blank=True)
     youtube_url = models.URLField("يوتيوب", blank=True)
+    home_hero_eyebrow = models.CharField("عبارة أعلى عنوان الرئيسية", max_length=180, default="أكاديمية عربية لكل بيت")
+    home_hero_title_prefix = models.CharField("بداية عنوان الرئيسية", max_length=120, default="نرسّخ")
+    home_hero_title_highlight = models.CharField("الكلمة المميزة في عنوان الرئيسية", max_length=120, default="الهوية")
+    home_hero_title_suffix = models.CharField("نهاية عنوان الرئيسية", max_length=180, default="ونبني المستقبل")
+    home_hero_description = models.TextField(
+        "وصف واجهة الرئيسية",
+        default=(
+            "تعليم العربية والقرآن والتربية الإسلامية بطريقة فردية تفاعلية تناسب أبناءنا في كل مكان، "
+            "وتمنح الأسرة راحة وثقة في رحلة التعلّم."
+        ),
+    )
+    about_hero_description = models.TextField(
+        "وصف واجهة من نحن",
+        default="أكاديمية تعليمية وُجدت لتقرب أبناءنا من لغتهم وقرآنهم وهويتهم، أينما كانت بيوتهم.",
+    )
+    about_heading_prefix = models.CharField(
+        "بداية عنوان من نحن", max_length=220, default="التعليم ليس معلومات فقط، بل"
+    )
+    about_heading_highlight = models.CharField("العبارة المميزة في عنوان من نحن", max_length=180, default="جسر إلى الهوية")
+    about_body_primary = models.TextField(
+        "الفقرة الأولى في من نحن",
+        default=(
+            "نساعد الأطفال والطلاب العرب والمسلمين المقيمين خارج العالم العربي على الارتباط بلغتهم "
+            "ودينهم، من خلال برامج أُعدت بعناية لتناسب العمر والمستوى وطبيعة التعلم أونلاين."
+        ),
+    )
+    about_body_secondary = models.TextField(
+        "الفقرة الثانية في من نحن",
+        default=(
+            "نؤمن أن جودة التعليم تبدأ بفهم الطالب، وأن الثقة تُبنى عندما يرى ولي الأمر خطة واضحة "
+            "وتقدمًا حقيقيًا واهتمامًا مستمرًا."
+        ),
+    )
+    vision_title = models.CharField("عنوان الرؤية", max_length=220, default="جيل يعتز بلغته ويعيش قيمه بوعي")
+    vision_description = models.TextField(
+        "نص الرؤية",
+        default="أن تكون آفاق شريكًا موثوقًا للأسر المسلمة في بناء صلة مستمرة بين أبنائها والعربية والقرآن والهوية.",
+    )
+    mission_title = models.CharField("عنوان الرسالة", max_length=220, default="تعليم فردي قريب من الطالب وحياته")
+    mission_description = models.TextField(
+        "نص الرسالة",
+        default="تقديم تجربة تعليمية مرنة وعالية الجودة تجمع العلم والتفاعل والمتابعة، وتراعي احتياج كل طالب.",
+    )
+    goal_title = models.CharField("عنوان الهدف", max_length=220, default="أثر يبقى بعد انتهاء الحصة")
+    goal_description = models.TextField(
+        "نص الهدف", default="أن يخرج الطالب بمعرفة يستخدمها، وثقة تنمو، وعلاقة أجمل بلغته ودينه ومجتمعه."
+    )
+    footer_description = models.TextField(
+        "وصف تذييل الموقع",
+        default=(
+            "تعليم فردي مباشر للغة العربية والقرآن الكريم والتربية الإسلامية، يساعد أبناءنا على فهم "
+            "لغتهم والاعتزاز بهويتهم."
+        ),
+    )
+    cta_eyebrow = models.CharField("عبارة أعلى دعوة الحجز", max_length=180, default="خطوة صغيرة، أثر كبير")
+    cta_title = models.CharField("عنوان دعوة الحجز", max_length=220, default="ابدأ رحلة ابنك مع آفاق اليوم")
+    cta_description = models.TextField(
+        "وصف دعوة الحجز",
+        default="دعنا نتعرف إلى احتياجاته ونرشح له نقطة البداية الأنسب في حصة تجريبية مجانية.",
+    )
 
     class Meta:
         verbose_name = "إعدادات الموقع"

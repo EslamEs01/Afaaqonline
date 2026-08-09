@@ -4,6 +4,7 @@ import { FinalCta } from "@/components/FinalCta";
 import { Icon } from "@/components/Icon";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
+import { getSiteSettings } from "@/lib/content-api";
 
 export const metadata: Metadata = {
   title: "من نحن",
@@ -25,13 +26,14 @@ const methodology = [
   ["نراجع ونتطور", "نرصد التقدم ونكيّف الخطة كلما احتاج الطالب إلى ذلك."],
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteSettings = await getSiteSettings();
   return (
     <>
       <PageHero
         eyebrow="قصتنا ورسالتنا"
         title="من نحن"
-        description="أكاديمية تعليمية وُجدت لتقرب أبناءنا من لغتهم وقرآنهم وهويتهم، أينما كانت بيوتهم."
+        description={siteSettings.aboutHeroDescription}
         symbol="آ"
       />
 
@@ -43,19 +45,13 @@ export default function AboutPage() {
             <div className="about-stat"><strong>1:1</strong><span>تعليم فردي<br />باهتمام كامل</span></div>
           </div>
           <div>
-            <span className="eyebrow"><i aria-hidden="true" />أكاديمية آفاق</span>
-            <h2 className="display-heading">التعليم ليس معلومات فقط، بل <em>جسر إلى الهوية</em></h2>
-            <p>
-              نساعد الأطفال والطلاب العرب والمسلمين المقيمين خارج العالم العربي على الارتباط بلغتهم
-              ودينهم، من خلال برامج أُعدت بعناية لتناسب العمر والمستوى وطبيعة التعلم أونلاين.
-            </p>
-            <p>
-              نؤمن أن جودة التعليم تبدأ بفهم الطالب، وأن الثقة تُبنى عندما يرى ولي الأمر خطة واضحة
-              وتقدمًا حقيقيًا واهتمامًا مستمرًا.
-            </p>
+            <span className="eyebrow"><i aria-hidden="true" />{siteSettings.academyName}</span>
+            <h2 className="display-heading">{siteSettings.aboutHeadingPrefix} <em>{siteSettings.aboutHeadingHighlight}</em></h2>
+            <p>{siteSettings.aboutBodyPrimary}</p>
+            <p>{siteSettings.aboutBodySecondary}</p>
             <div className="about-signature">
               <img src="/images/afaaq-mark.webp" alt="" />
-              <p><strong>نرسّخ الهوية ونبني المستقبل</strong><small>وعد آفاق لكل أسرة</small></p>
+              <p><strong>{siteSettings.slogan}</strong><small>وعد آفاق لكل أسرة</small></p>
             </div>
           </div>
         </div>
@@ -65,18 +61,18 @@ export default function AboutPage() {
         <div className="container vision-grid">
           <article>
             <span>01</span><small>رؤيتنا</small>
-            <h2>جيل يعتز بلغته ويعيش قيمه بوعي</h2>
-            <p>أن تكون آفاق شريكًا موثوقًا للأسر المسلمة في بناء صلة مستمرة بين أبنائها والعربية والقرآن والهوية.</p>
+            <h2>{siteSettings.visionTitle}</h2>
+            <p>{siteSettings.visionDescription}</p>
           </article>
           <article>
             <span>02</span><small>رسالتنا</small>
-            <h2>تعليم فردي قريب من الطالب وحياته</h2>
-            <p>تقديم تجربة تعليمية مرنة وعالية الجودة تجمع العلم والتفاعل والمتابعة، وتراعي احتياج كل طالب.</p>
+            <h2>{siteSettings.missionTitle}</h2>
+            <p>{siteSettings.missionDescription}</p>
           </article>
           <article>
             <span>03</span><small>هدفنا</small>
-            <h2>أثر يبقى بعد انتهاء الحصة</h2>
-            <p>أن يخرج الطالب بمعرفة يستخدمها، وثقة تنمو، وعلاقة أجمل بلغته ودينه ومجتمعه.</p>
+            <h2>{siteSettings.goalTitle}</h2>
+            <p>{siteSettings.goalDescription}</p>
           </article>
         </div>
       </section>
@@ -133,4 +129,3 @@ export default function AboutPage() {
     </>
   );
 }
-

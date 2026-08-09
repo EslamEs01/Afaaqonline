@@ -20,10 +20,7 @@ export function Footer() {
       <div className="container footer-grid">
         <div className="footer-brand">
           <img src="/images/afaaq-logo.webp" alt="أكاديمية آفاق" />
-          <p>
-            تعليم فردي مباشر للغة العربية والقرآن الكريم والتربية الإسلامية، يساعد أبناءنا على فهم
-            لغتهم والاعتزاز بهويتهم.
-          </p>
+          <p>{siteSettings.footerDescription}</p>
           <strong>{siteSettings.slogan}</strong>
         </div>
 

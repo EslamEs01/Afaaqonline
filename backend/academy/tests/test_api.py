@@ -59,6 +59,20 @@ class PublicApiTests(TestCase):
         response = self.client.get(reverse("academy:faq-list"))
         self.assertEqual([item["question"] for item in response.json()], ["سؤال ظاهر"])
 
+    def test_site_settings_exposes_admin_managed_page_content(self):
+        SiteSettings.objects.create(
+            home_hero_eyebrow="عنوان رئيسي من الإدارة",
+            vision_title="رؤية محدثة من الإدارة",
+            footer_description="وصف تذييل محدث من الإدارة",
+        )
+
+        response = self.client.get(reverse("academy:site-settings"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["homeHeroEyebrow"], "عنوان رئيسي من الإدارة")
+        self.assertEqual(response.json()["visionTitle"], "رؤية محدثة من الإدارة")
+        self.assertEqual(response.json()["footerDescription"], "وصف تذييل محدث من الإدارة")
+
     def test_trial_request_is_stored(self):
         payload = {
             "subject": "اللغة العربية",
@@ -194,7 +208,8 @@ class SeedCommandTests(TestCase):
         first_counts = (Course.objects.count(), FAQ.objects.count(), SiteSettings.objects.count())
         site_settings = SiteSettings.objects.get()
         site_settings.phone = "+20 100 000 0000"
-        site_settings.save(update_fields=["phone"])
+        site_settings.home_hero_eyebrow = "عنوان رئيسي عدّله المدير"
+        site_settings.save(update_fields=["phone", "home_hero_eyebrow"])
         call_command("seed_afaaq", verbosity=0)
 
         self.assertEqual(first_counts, (13, 10, 1))
@@ -203,6 +218,7 @@ class SeedCommandTests(TestCase):
         trial.refresh_from_db()
         message.refresh_from_db()
         self.assertEqual(site_settings.phone, "+20 100 000 0000")
+        self.assertEqual(site_settings.home_hero_eyebrow, "عنوان رئيسي عدّله المدير")
         self.assertEqual((trial.status, trial.admin_notes), (TrialRequest.Status.CONTACTED, "ملاحظة فريق حقيقية"))
         self.assertEqual((message.status, message.admin_notes), (ContactMessage.Status.IN_PROGRESS, "تتم المتابعة"))
 
@@ -214,10 +230,11 @@ class SeedCommandTests(TestCase):
     }
 )
 class AdminBrandingTests(TestCase):
-    def test_jazzmin_login_and_dashboard_render_in_arabic(self):
+    def test_jazzmin_login_and_dashboard_render_with_light_arabic_branding(self):
         login = self.client.get("/admin/login/")
         self.assertEqual(login.status_code, 200)
         self.assertContains(login, "أكاديمية آفاق")
+        self.assertContains(login, "|| 'light'")
 
         user = get_user_model().objects.create_superuser(
             username="admin-test",
@@ -228,6 +245,7 @@ class AdminBrandingTests(TestCase):
         dashboard = self.client.get("/admin/")
         self.assertEqual(dashboard.status_code, 200)
         self.assertContains(dashboard, "لوحة إدارة أكاديمية آفاق")
+        self.assertContains(dashboard, "app-sidebar bg-body-secondary shadow bg-white")
 
 
 class StaticStorageTests(TestCase):

@@ -4,7 +4,7 @@ import { FinalCta } from "@/components/FinalCta";
 import { Icon } from "@/components/Icon";
 import { SectionHeading } from "@/components/SectionHeading";
 import { categoryMeta } from "@/data/courses";
-import { getCourses, getTestimonials } from "@/lib/content-api";
+import { getCourses, getSiteSettings, getTestimonials } from "@/lib/content-api";
 
 const strengths = [
   { icon: "teacher" as const, title: "تعليم فردي مباشر", text: "معلم واحد وطالب واحد لاهتمام كامل ووقت تعلّم فعّال." },
@@ -23,7 +23,7 @@ const journey = [
 ];
 
 export default async function Home() {
-  const [courses, testimonials] = await Promise.all([getCourses(), getTestimonials()]);
+  const [courses, testimonials, siteSettings] = await Promise.all([getCourses(), getTestimonials(), getSiteSettings()]);
   const featuredCourses = courses.filter((course) => course.isFeatured);
   const homeCourses = featuredCourses.length >= 3
     ? featuredCourses.slice(0, 3)
@@ -34,15 +34,12 @@ export default async function Home() {
         <div className="hero-dots" aria-hidden="true" />
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="eyebrow"><i aria-hidden="true" />أكاديمية عربية لكل بيت</span>
+            <span className="eyebrow"><i aria-hidden="true" />{siteSettings.homeHeroEyebrow}</span>
             <h1>
-              نرسّخ <em>الهوية</em>
-              <br />ونبني المستقبل
+              {siteSettings.homeHeroTitlePrefix} <em>{siteSettings.homeHeroTitleHighlight}</em>
+              <br />{siteSettings.homeHeroTitleSuffix}
             </h1>
-            <p>
-              تعليم العربية والقرآن والتربية الإسلامية بطريقة فردية تفاعلية تناسب أبناءنا في كل مكان،
-              وتمنح الأسرة راحة وثقة في رحلة التعلّم.
-            </p>
+            <p>{siteSettings.homeHeroDescription}</p>
             <div className="hero-actions">
               <Link className="button button-primary" href="/free-trial">
                 احجز حصتك التجريبية <Icon name="arrow" />

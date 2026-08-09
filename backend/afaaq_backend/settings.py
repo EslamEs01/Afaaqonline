@@ -194,15 +194,15 @@ JAZZMIN_SETTINGS = {
 
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
-    "default_theme_mode": "auto",
-    "navbar": "navbar-dark",
+    "default_theme_mode": "light",
+    "navbar": "navbar-white navbar-light",
     "navbar_fixed": True,
-    "sidebar": "sidebar-dark-success",
+    "sidebar": "bg-white",
     "sidebar_fixed": True,
     "sidebar_nav_compact_style": True,
     "sidebar_nav_child_indent": True,
     "accent": "accent-warning",
-    "brand_colour": "navbar-success",
+    "brand_colour": "bg-white",
     "button_classes": {
         "primary": "btn-success",
         "secondary": "btn-outline-secondary",

@@ -89,11 +89,44 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
-    readonly_fields = ("created_at", "updated_at")
+    list_display = ("academy_name", "phone", "email", "updated_at")
+    readonly_fields = ("site_url", "created_at", "updated_at")
+    save_on_top = True
     fieldsets = (
         ("الهوية", {"fields": ("academy_name", "slogan", "site_url")}),
         ("التواصل", {"fields": ("email", "phone", "whatsapp", "contact_hours")}),
         ("التواصل الاجتماعي", {"fields": ("facebook_url", "instagram_url", "youtube_url")}),
+        (
+            "واجهة الصفحة الرئيسية",
+            {
+                "fields": (
+                    "home_hero_eyebrow",
+                    "home_hero_title_prefix",
+                    "home_hero_title_highlight",
+                    "home_hero_title_suffix",
+                    "home_hero_description",
+                )
+            },
+        ),
+        (
+            "صفحة من نحن",
+            {
+                "fields": (
+                    "about_hero_description",
+                    "about_heading_prefix",
+                    "about_heading_highlight",
+                    "about_body_primary",
+                    "about_body_secondary",
+                    "vision_title",
+                    "vision_description",
+                    "mission_title",
+                    "mission_description",
+                    "goal_title",
+                    "goal_description",
+                )
+            },
+        ),
+        ("التذييل ودعوة الحجز", {"fields": ("footer_description", "cta_eyebrow", "cta_title", "cta_description")}),
         ("سجل التحديث", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),
     )
 
