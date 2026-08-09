@@ -43,6 +43,9 @@ def notify_contact_message(message: ContactMessage) -> None:
 
 
 def _send_notification(subject: str, body: str) -> None:
+    if not settings.AFQ_EMAIL_NOTIFICATIONS_ENABLED:
+        logger.info("Afaaq email notification skipped because SMTP notifications are disabled")
+        return
     try:
         send_mail(
             subject=subject,

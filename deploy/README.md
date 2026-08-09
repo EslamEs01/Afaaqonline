@@ -20,6 +20,8 @@
 8. بعد تحقق DNS، أصدر شهادة للدومينين وثبّت `deploy/nginx/afaaqinstitute.conf` النهائي.
 9. لا ترفع HSTS في `backend/.env` من `0` إلى `31536000` إلا بعد نجاح HTTPS خارجيًا.
 
+تبقى `AFQ_EMAIL_NOTIFICATIONS_ENABLED=false` ما لم يُضبط SMTP فعليًا ويُختبر. حفظ طلبات الموقع في PostgreSQL لا يعتمد على نجاح البريد.
+
 ## تحديث آمن
 
 ```bash

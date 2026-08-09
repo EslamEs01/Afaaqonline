@@ -116,6 +116,7 @@ REST_FRAMEWORK = {
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Afaaq Academy <afaaqinstitute@gmail.com>")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 AFQ_NOTIFICATION_EMAIL = os.getenv("AFQ_NOTIFICATION_EMAIL", "afaaqinstitute@gmail.com")
+AFQ_EMAIL_NOTIFICATIONS_ENABLED = env_bool("AFQ_EMAIL_NOTIFICATIONS_ENABLED", False)
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
