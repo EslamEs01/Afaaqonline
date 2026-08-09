@@ -12,6 +12,19 @@ export type Testimonial = {
   rating: number;
 };
 
+export type PricingPlan = {
+  name: string;
+  description: string;
+  price: string;
+  currency: string;
+  billingPeriod: string;
+  lessonCount: number | null;
+  lessonDuration: string;
+  features: string[];
+  ctaLabel: string;
+  isFeatured: boolean;
+};
+
 const INTERNAL_API_BASE = process.env.AFQ_API_INTERNAL_URL?.replace(/\/$/, "");
 
 async function fetchContent<T>(path: string): Promise<T | null> {
@@ -43,6 +56,10 @@ export async function getFaqs(): Promise<FaqItem[]> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   return (await fetchContent<Testimonial[]>("testimonials/")) || [];
+}
+
+export async function getPricingPlans(): Promise<PricingPlan[]> {
+  return (await fetchContent<PricingPlan[]>("pricing-plans/")) || [];
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {

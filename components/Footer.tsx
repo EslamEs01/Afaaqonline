@@ -29,6 +29,7 @@ export function Footer() {
           <ul>
             <li><Link href="/about">من نحن</Link></li>
             <li><Link href="/courses">كل الكورسات</Link></li>
+            <li><Link href="/plans">الخطط والأسعار</Link></li>
             <li><Link href="/private-lessons">الدروس الفردية</Link></li>
             <li><Link href="/free-trial">الحصة التجريبية</Link></li>
             <li><Link href="/faq">الأسئلة الشائعة</Link></li>
@@ -55,6 +56,12 @@ export function Footer() {
             <Icon name="email" />
             {siteSettings.email}
           </a>
+          {siteSettings.facebookUrl ? (
+            <a href={siteSettings.facebookUrl} target="_blank" rel="noreferrer" aria-label="صفحة أكاديمية آفاق على فيسبوك">
+              <Icon name="facebook" />
+              تابعنا على فيسبوك
+            </a>
+          ) : null}
         </div>
       </div>
       <div className="container footer-bottom">

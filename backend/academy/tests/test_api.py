@@ -7,7 +7,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from academy.models import ContactMessage, Course, FAQ, SiteSettings, Testimonial, TrialRequest
+from academy.models import ContactMessage, Course, FAQ, PricingPlan, SiteSettings, Testimonial, TrialRequest
 
 
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
@@ -58,6 +58,30 @@ class PublicApiTests(TestCase):
         FAQ.objects.create(question="سؤال مخفي", answer="إجابة", is_active=False)
         response = self.client.get(reverse("academy:faq-list"))
         self.assertEqual([item["question"] for item in response.json()], ["سؤال ظاهر"])
+
+    def test_only_active_pricing_plans_are_public(self):
+        PricingPlan.objects.create(
+            name="خطة منشورة",
+            price="25.00",
+            currency="USD",
+            billing_period="شهريًا",
+            features=["حصص فردية"],
+            is_active=True,
+        )
+        PricingPlan.objects.create(
+            name="خطة مخفية",
+            price="40.00",
+            currency="USD",
+            billing_period="شهريًا",
+            is_active=False,
+        )
+
+        response = self.client.get(reverse("academy:pricing-plan-list"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual([item["name"] for item in response.json()], ["خطة منشورة"])
+        self.assertEqual(response.json()[0]["billingPeriod"], "شهريًا")
+        self.assertEqual(response.json()[0]["features"], ["حصص فردية"])
 
     def test_site_settings_exposes_admin_managed_page_content(self):
         SiteSettings.objects.create(
@@ -203,6 +227,13 @@ class SeedCommandTests(TestCase):
             status=ContactMessage.Status.IN_PROGRESS,
             admin_notes="تتم المتابعة",
         )
+        plan = PricingPlan.objects.create(
+            name="خطة أدخلها المدير",
+            price="75.00",
+            currency="USD",
+            billing_period="شهريًا",
+            is_active=True,
+        )
 
         call_command("seed_afaaq", verbosity=0)
         first_counts = (Course.objects.count(), FAQ.objects.count(), SiteSettings.objects.count())
@@ -217,10 +248,12 @@ class SeedCommandTests(TestCase):
         site_settings.refresh_from_db()
         trial.refresh_from_db()
         message.refresh_from_db()
+        plan.refresh_from_db()
         self.assertEqual(site_settings.phone, "+20 100 000 0000")
         self.assertEqual(site_settings.home_hero_eyebrow, "عنوان رئيسي عدّله المدير")
         self.assertEqual((trial.status, trial.admin_notes), (TrialRequest.Status.CONTACTED, "ملاحظة فريق حقيقية"))
         self.assertEqual((message.status, message.admin_notes), (ContactMessage.Status.IN_PROGRESS, "تتم المتابعة"))
+        self.assertEqual((str(plan.price), plan.is_active), ("75.00", True))
 
 
 @override_settings(

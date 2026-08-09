@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { CourseCard } from "@/components/CourseCard";
 import { FinalCta } from "@/components/FinalCta";
+import { HomeAnimations } from "@/components/HomeAnimations";
 import { Icon } from "@/components/Icon";
+import { PricingCards } from "@/components/PricingCards";
 import { SectionHeading } from "@/components/SectionHeading";
 import { categoryMeta } from "@/data/courses";
-import { getCourses, getSiteSettings, getTestimonials } from "@/lib/content-api";
+import { getCourses, getPricingPlans, getSiteSettings, getTestimonials } from "@/lib/content-api";
 
 const strengths = [
   { icon: "teacher" as const, title: "تعليم فردي مباشر", text: "معلم واحد وطالب واحد لاهتمام كامل ووقت تعلّم فعّال." },
@@ -23,17 +25,23 @@ const journey = [
 ];
 
 export default async function Home() {
-  const [courses, testimonials, siteSettings] = await Promise.all([getCourses(), getTestimonials(), getSiteSettings()]);
+  const [courses, testimonials, pricingPlans, siteSettings] = await Promise.all([
+    getCourses(),
+    getTestimonials(),
+    getPricingPlans(),
+    getSiteSettings(),
+  ]);
   const featuredCourses = courses.filter((course) => course.isFeatured);
   const homeCourses = featuredCourses.length >= 3
     ? featuredCourses.slice(0, 3)
     : [courses.find((course) => course.category === "arabic"), courses.find((course) => course.category === "quran"), courses.find((course) => course.category === "islamic")].filter((course) => course !== undefined);
   return (
     <>
+      <HomeAnimations />
       <section className="home-hero">
         <div className="hero-dots" aria-hidden="true" />
         <div className="container hero-grid">
-          <div className="hero-copy">
+          <div className="hero-copy" data-reveal>
             <span className="eyebrow"><i aria-hidden="true" />{siteSettings.homeHeroEyebrow}</span>
             <h1>
               {siteSettings.homeHeroTitlePrefix} <em>{siteSettings.homeHeroTitleHighlight}</em>
@@ -56,7 +64,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="hero-visual">
+          <div className="hero-visual" data-reveal data-reveal-delay="1">
             <div className="hero-image-frame">
               <img src="/images/hero-learning.webp" alt="طالب يتعلم العربية والقرآن في درس أونلاين" />
             </div>
@@ -74,7 +82,7 @@ export default async function Home() {
       </section>
 
       <section className="strengths-section section-pad">
-        <div className="container">
+        <div className="container" data-reveal>
           <SectionHeading
             eyebrow="لماذا آفاق؟"
             title="كل ما يحتاجه الطالب ليتعلم بثقة"
@@ -92,7 +100,7 @@ export default async function Home() {
       </section>
 
       <section className="programs-section section-pad">
-        <div className="container">
+        <div className="container" data-reveal>
           <SectionHeading
             eyebrow="ماذا نقدّم؟"
             title="ثلاثة مسارات، وهدف واحد"
@@ -118,7 +126,7 @@ export default async function Home() {
       </section>
 
       <section className="journey-section section-pad">
-        <div className="container">
+        <div className="container" data-reveal>
           <div className="journey-heading-row">
             <SectionHeading
               align="start"
@@ -143,7 +151,7 @@ export default async function Home() {
       </section>
 
       <section className="featured-courses section-pad">
-        <div className="container">
+        <div className="container" data-reveal>
           <div className="section-heading-row">
             <SectionHeading align="start" eyebrow="كورسات مختارة" title="بدايات صُممت لتناسب كل طالب" />
             <Link className="text-link text-link-large" href="/courses">عرض جميع الكورسات <Icon name="arrow" /></Link>
@@ -154,8 +162,20 @@ export default async function Home() {
         </div>
       </section>
 
+      {pricingPlans.length ? (
+        <section className="pricing-section home-pricing section-pad">
+          <div className="container" data-reveal>
+            <div className="section-heading-row">
+              <SectionHeading align="start" eyebrow="خطط مرنة" title="اختر البداية المناسبة" description="خطط منشورة من فريق آفاق بتفاصيل واضحة للحصص والمميزات." />
+              <Link className="text-link text-link-large" href="/plans">كل الخطط والأسعار <Icon name="arrow" /></Link>
+            </div>
+            <PricingCards plans={pricingPlans.slice(0, 3)} whatsapp={siteSettings.whatsapp} />
+          </div>
+        </section>
+      ) : null}
+
       <section className="parent-message section-pad">
-        <div className="container parent-grid">
+        <div className="container parent-grid" data-reveal>
           <div className="parent-image-wrap">
             <img src="/images/parent-identity.webp" alt="أب يقرأ مع طفله ويشجعه على حب العربية" />
             <div className="parent-badge"><Icon name="heart" /><span><strong>الهوية تبدأ من البيت</strong><small>ونحن نشارككم بناءها</small></span></div>
@@ -176,7 +196,7 @@ export default async function Home() {
 
       {testimonials.length ? (
         <section className="testimonials-section section-pad">
-          <div className="container">
+          <div className="container" data-reveal>
             <SectionHeading eyebrow="قالوا عن آفاق" title="تجارب تبدأ بالطمأنينة وتنمو بالنتائج" />
             <div className="testimonials-grid">
               {testimonials.map((testimonial) => (

@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -10,6 +11,11 @@ class TimestampedModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+def validate_feature_list(value) -> None:
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item.strip() for item in value):
+        raise ValidationError("أدخل المميزات في صورة قائمة من النصوص غير الفارغة.")
 
 
 class Course(TimestampedModel):
@@ -86,6 +92,34 @@ class FAQ(TimestampedModel):
         return self.question
 
 
+class PricingPlan(TimestampedModel):
+    name = models.CharField("اسم الخطة", max_length=140, unique=True)
+    description = models.TextField("وصف الخطة", blank=True)
+    price = models.DecimalField("السعر", max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    currency = models.CharField("العملة", max_length=30, help_text="مثال: دولار أو USD")
+    billing_period = models.CharField("فترة السعر", max_length=80, help_text="مثال: شهريًا أو لكل 8 حصص")
+    lesson_count = models.PositiveSmallIntegerField("عدد الحصص", null=True, blank=True)
+    lesson_duration = models.CharField("مدة الحصة", max_length=80, blank=True)
+    features = models.JSONField(
+        "مميزات الخطة",
+        default=list,
+        validators=[validate_feature_list],
+        help_text='أدخل قائمة JSON مثل: ["حصص فردية", "متابعة دورية"]',
+    )
+    cta_label = models.CharField("نص زر الحجز", max_length=80, default="احجز الآن")
+    is_featured = models.BooleanField("الخطة المميزة", default=False)
+    is_active = models.BooleanField("ظاهرة في الموقع", default=False, db_index=True)
+    sort_order = models.PositiveSmallIntegerField("الترتيب", default=0)
+
+    class Meta:
+        ordering = ("sort_order", "id")
+        verbose_name = "خطة سعر"
+        verbose_name_plural = "الخطط والأسعار"
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class SiteSettings(TimestampedModel):
     academy_name = models.CharField("اسم الأكاديمية", max_length=120, default="أكاديمية آفاق")
     slogan = models.CharField("الشعار النصي", max_length=180, default="نرسّخ الهوية ونبني المستقبل")
@@ -96,7 +130,11 @@ class SiteSettings(TimestampedModel):
     contact_hours = models.CharField(
         "أوقات التواصل", max_length=220, default="يوميًا من 10 صباحًا حتى 10 مساءً بتوقيت القاهرة"
     )
-    facebook_url = models.URLField("فيسبوك", blank=True)
+    facebook_url = models.URLField(
+        "فيسبوك",
+        blank=True,
+        default="https://www.facebook.com/profile.php?id=61592705708385",
+    )
     instagram_url = models.URLField("إنستجرام", blank=True)
     youtube_url = models.URLField("يوتيوب", blank=True)
     home_hero_eyebrow = models.CharField("عبارة أعلى عنوان الرئيسية", max_length=180, default="أكاديمية عربية لكل بيت")

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ContactMessage, Course, FAQ, SiteSettings, Testimonial, TrialRequest
+from .models import ContactMessage, Course, FAQ, PricingPlan, SiteSettings, Testimonial, TrialRequest
 
 
 @admin.register(Course)
@@ -44,6 +44,22 @@ class FAQAdmin(admin.ModelAdmin):
     fieldsets = (
         ("السؤال والإجابة", {"fields": ("question", "answer")}),
         ("العرض في الموقع", {"fields": ("is_active", "sort_order")}),
+        ("سجل التحديث", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),
+    )
+
+
+@admin.register(PricingPlan)
+class PricingPlanAdmin(admin.ModelAdmin):
+    list_display = ("name", "price", "currency", "billing_period", "is_featured", "is_active", "sort_order")
+    list_filter = ("is_active", "is_featured", "currency", "billing_period")
+    search_fields = ("name", "description")
+    list_editable = ("is_featured", "is_active", "sort_order")
+    ordering = ("sort_order", "id")
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        ("الخطة والسعر", {"fields": ("name", "description", "price", "currency", "billing_period")}),
+        ("تفاصيل الحصص", {"fields": ("lesson_count", "lesson_duration", "features")}),
+        ("العرض والحجز", {"fields": ("cta_label", "is_featured", "is_active", "sort_order")}),
         ("سجل التحديث", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),
     )
 

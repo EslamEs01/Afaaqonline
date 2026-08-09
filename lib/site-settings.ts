@@ -39,7 +39,7 @@ export const defaultSiteSettings: SiteSettings = {
   phone: "+20 104 139 1631",
   whatsapp: "201041391631",
   contactHours: "يوميًا من 10 صباحًا حتى 10 مساءً بتوقيت القاهرة",
-  facebookUrl: "",
+  facebookUrl: "https://www.facebook.com/profile.php?id=61592705708385",
   instagramUrl: "",
   youtubeUrl: "",
   homeHeroEyebrow: "أكاديمية عربية لكل بيت",

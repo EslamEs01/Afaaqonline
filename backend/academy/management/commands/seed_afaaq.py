@@ -66,6 +66,7 @@ class Command(BaseCommand):
                 "email": "afaaqinstitute@gmail.com",
                 "phone": "+20 104 139 1631",
                 "whatsapp": "201041391631",
+                "facebook_url": "https://www.facebook.com/profile.php?id=61592705708385",
                 "contact_hours": "يوميًا من 10 صباحًا حتى 10 مساءً بتوقيت القاهرة",
             },
         )

@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from .models import ContactMessage, Course, FAQ, SiteSettings, Testimonial, TrialRequest
+from .models import ContactMessage, Course, FAQ, PricingPlan, SiteSettings, Testimonial, TrialRequest
 
 
 def create_idempotent_submission(submission_model, validated_fields):
@@ -53,6 +53,29 @@ class FAQSerializer(serializers.ModelSerializer):
     class Meta:
         model = FAQ
         fields = ("question", "answer")
+
+
+class PricingPlanSerializer(serializers.ModelSerializer):
+    billingPeriod = serializers.CharField(source="billing_period", read_only=True)
+    lessonCount = serializers.IntegerField(source="lesson_count", read_only=True)
+    lessonDuration = serializers.CharField(source="lesson_duration", read_only=True)
+    ctaLabel = serializers.CharField(source="cta_label", read_only=True)
+    isFeatured = serializers.BooleanField(source="is_featured", read_only=True)
+
+    class Meta:
+        model = PricingPlan
+        fields = (
+            "name",
+            "description",
+            "price",
+            "currency",
+            "billingPeriod",
+            "lessonCount",
+            "lessonDuration",
+            "features",
+            "ctaLabel",
+            "isFeatured",
+        )
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):

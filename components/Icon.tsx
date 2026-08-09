@@ -5,6 +5,7 @@ type IconName =
   | "clock"
   | "close"
   | "email"
+  | "facebook"
   | "globe"
   | "heart"
   | "menu"
@@ -39,6 +40,7 @@ const paths: Record<IconName, React.ReactNode> = {
       <path d="m3 7 9 6 9-6" />
     </>
   ),
+  facebook: <path d="M14 21v-8h3l.5-3H14V8.3c0-.9.3-1.6 1.7-1.6h2V4.1c-.8-.1-1.7-.2-2.5-.2-2.6 0-4.2 1.6-4.2 4.5V10H8v3h3v8" />,
   globe: (
     <>
       <circle cx="12" cy="12" r="9" />
@@ -99,4 +101,3 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     </svg>
   );
 }
-

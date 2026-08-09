@@ -25,6 +25,9 @@ test("renders the Arabic RTL branded homepage", async () => {
   assert.match(html, /احجز حصتك التجريبية/);
   assert.match(html, /afaaqinstitute@gmail\.com/);
   assert.match(html, /https:\/\/afaaqinstitute\.com/);
+  assert.match(html, /facebook\.com\/profile\.php\?id=61592705708385/);
+  assert.match(html, /wa\.me\/201041391631/);
+  assert.match(html, /data-reveal/);
   assert.doesNotMatch(html, /afaaqonline\.com/i);
   assert.doesNotMatch(html, /Starter Project|Ship something real/);
 });
@@ -33,6 +36,7 @@ test("renders core public routes", async () => {
   for (const [path, marker] of [
     ["/about", "من نحن"],
     ["/courses", "البرامج والكورسات"],
+    ["/plans", "الخطط والأسعار"],
     ["/private-lessons", "الدروس الفردية"],
     ["/free-trial", "احجز حصة تجريبية مجانية"],
     ["/contact", "تواصل معنا"],

@@ -11,6 +11,7 @@ const navItems = [
   { href: "/", label: "الرئيسية" },
   { href: "/about", label: "من نحن" },
   { href: "/courses", label: "البرامج والكورسات" },
+  { href: "/plans", label: "الخطط والأسعار" },
   { href: "/private-lessons", label: "الدروس الفردية" },
   { href: "/faq", label: "الأسئلة الشائعة" },
   { href: "/contact", label: "تواصل معنا" },

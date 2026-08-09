@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import ScopedRateThrottle
 
-from .models import ContactMessage, Course, FAQ, SiteSettings, Testimonial, TrialRequest
+from .models import ContactMessage, Course, FAQ, PricingPlan, SiteSettings, Testimonial, TrialRequest
 from .serializers import (
     ContactMessageSerializer,
     CourseSerializer,
     FAQSerializer,
+    PricingPlanSerializer,
     SiteSettingsSerializer,
     TestimonialSerializer,
     TrialRequestSerializer,
@@ -65,6 +66,14 @@ class TestimonialListView(generics.ListAPIView):
 class FAQListView(generics.ListAPIView):
     queryset = FAQ.objects.filter(is_active=True)
     serializer_class = FAQSerializer
+    throttle_classes = []
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+
+class PricingPlanListView(generics.ListAPIView):
+    queryset = PricingPlan.objects.filter(is_active=True)
+    serializer_class = PricingPlanSerializer
     throttle_classes = []
     authentication_classes = []
     permission_classes = [AllowAny]
