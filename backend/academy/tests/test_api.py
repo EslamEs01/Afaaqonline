@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -227,3 +228,8 @@ class AdminBrandingTests(TestCase):
         dashboard = self.client.get("/admin/")
         self.assertEqual(dashboard.status_code, 200)
         self.assertContains(dashboard, "لوحة إدارة أكاديمية آفاق")
+
+
+class StaticStorageTests(TestCase):
+    def test_jazzmin_bootswatch_directory_has_a_manifest_safe_url(self):
+        self.assertEqual(staticfiles_storage.url("vendor/bootswatch"), "/static/vendor/bootswatch")
