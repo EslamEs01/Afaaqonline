@@ -120,20 +120,28 @@ button:disabled { cursor: wait; opacity: .72; transform: none; }
 .hero-trust strong { color: var(--green-950); font-size: .81rem; }
 .hero-trust small { color: var(--muted); font-size: .69rem; }
 .hero-visual { position: relative; min-width: 0; }
-.hero-image-frame { position: relative; overflow: hidden; aspect-ratio: 3/2; border: 10px solid rgba(255,255,255,.84); border-radius: 46% 46% 28px 28px; box-shadow: var(--shadow-md); }
+.hero-image-frame { position: relative; overflow: hidden; aspect-ratio: 3/2; border: 10px solid rgba(255,255,255,.84); border-radius: 46% 46% 28px 28px; box-shadow: var(--shadow-md); animation: hero-image-float 6.5s ease-in-out 1s infinite; }
 .hero-image-frame::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(7,55,25,.06); pointer-events: none; }
 .hero-image-frame img { width: 100%; height: 100%; object-fit: cover; }
-.floating-note { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; min-width: 185px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.9); border-radius: 15px; background: rgba(255,255,255,.93); box-shadow: var(--shadow-sm); backdrop-filter: blur(10px); }
+.floating-note { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; min-width: 185px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.9); border-radius: 15px; background: rgba(255,255,255,.93); box-shadow: var(--shadow-sm); backdrop-filter: blur(10px); animation: hero-note-float 4.8s ease-in-out infinite; }
 .floating-note > span { width: 38px; height: 38px; display: grid; place-items: center; flex: none; border-radius: 11px; background: var(--green-100); color: var(--green-800); }
 .floating-note p { margin: 0; line-height: 1.4; }
 .floating-note strong, .floating-note small { display: block; }
 .floating-note strong { color: var(--green-950); font-size: .75rem; }
 .floating-note small { color: var(--muted); font-size: .64rem; }
 .note-top { top: 9%; right: -25px; }
-.note-bottom { bottom: 8%; left: -28px; }
+.note-bottom { bottom: 8%; left: -28px; animation-delay: -2.4s; }
 .note-bottom > span { background: #f5e5bf; color: var(--gold-700); }
 .hero-dots { position: absolute; left: 3%; bottom: 14%; width: 90px; height: 90px; opacity: .28; background-image: radial-gradient(var(--gold-500) 2px, transparent 2px); background-size: 14px 14px; }
 .hero-wave { position: absolute; left: -2%; right: -2%; bottom: -31px; height: 62px; border-radius: 50% 50% 0 0; background: white; }
+@keyframes hero-image-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+  50% { transform: translate3d(0, -10px, 0) rotate(-.25deg); }
+}
+@keyframes hero-note-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -7px, 0); }
+}
 
 /* Generic cards and home sections */
 .strengths-section { background: white; }
