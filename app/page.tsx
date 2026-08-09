@@ -41,7 +41,7 @@ export default async function Home() {
       <section className="home-hero">
         <div className="hero-dots" aria-hidden="true" />
         <div className="container hero-grid">
-          <div className="hero-copy" data-reveal>
+          <div className="hero-copy hero-entry hero-entry-copy">
             <span className="eyebrow"><i aria-hidden="true" />{siteSettings.homeHeroEyebrow}</span>
             <h1>
               {siteSettings.homeHeroTitlePrefix} <em>{siteSettings.homeHeroTitleHighlight}</em>
@@ -64,7 +64,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="hero-visual" data-reveal data-reveal-delay="1">
+          <div className="hero-visual hero-entry hero-entry-visual">
             <div className="hero-image-frame">
               <img src="/images/hero-learning.webp" alt="طالب يتعلم العربية والقرآن في درس أونلاين" />
             </div>
